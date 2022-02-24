@@ -1,32 +1,65 @@
-import ROOT, os, glob
+import os, argparse
+import ROOT, glob
 import numpy as np
 from array import array
 ROOT.gROOT.SetBatch(True)
 
-########edit case by case batch number, M type, directory path, foil number, channel number, and file name
-# Open file
-path_data = "../batch_09/QC2Long2/"
-path_saved = "../batch_09/Result/QC2Long_part2/"
+#### example usgae
+# python3 part2_tcv.py -m 3 -b 02 -c 2 3 4 5 6 -f 13A 16A 8B 20A 6B
+
+##### Parse arguments
+parser = argparse.ArgumentParser()
+parser.add_argument("-m", default=None, required=True, type=str, help="Mxx")
+parser.add_argument("--batch", "-b", default=None, required=True, type=str, help="batch number")
+parser.add_argument("--channels", "-c", nargs="+", default=None, required=True, type=int, help="HV channels")
+parser.add_argument("--foils", "-f", nargs="+", default=None, required=True, type=str, help="corresponding foil numbers")
+args = parser.parse_args()
+
+##### edit case by case batch number, M type, directory path, foil number, channel number, and file name
+path_data = f".data/M{args.m}_Batch_{int(args.batch)}/Part2/"
+path_saved = f".results/M{args.m}_Batch_{int(args.batch)}/Part2/"
 if not os.path.exists(path_saved+"Plots/"): os.makedirs(path_saved+"Plots/")
 if not os.path.exists(path_saved+"ROOTs/"): os.makedirs(path_saved+"ROOTs/")
+batch_num = f"B{args.batch}"
+M_type = f"M{args.m}"
 
-batch_num = '09'
-M_type = '2'
+# match channels and foils
+channels = args.channels
+foils = args.foils
+assert len(channels) == len(foils)
+print(channels)
+print(foils)
 
-# Fix these case-by-case 
-fname = "Ch3F22_Ch4F26" #"Ch1F30_Ch2F22_Ch3F7_Ch4F15_Ch5F20"
-foil_A_num = ["22","26"]
+fname = ""
+for (ch, f) in zip(channels, foils):
+    fname += f"Ch{ch}F{f[:-1]}_"
+fname = fname[:-1]
+fname = "Ch2F23_Ch3F10_Ch5B3F5_Ch6F4"
+
+foil_A_num = []
 foil_B_num = []
-foil_A_channel = [3,4] 
+foil_A_channel = []
 foil_B_channel = []
+for (ch, f) in zip(channels, foils):
+    foil_num = "0"*(5-len(f)) + f[:-1]
+    if "A" in f:
+        foil_A_num.append(foil_num)
+        foil_A_channel.append(ch)
+    elif "B" in f:
+        foil_B_num.append(foil_num)
+        foil_B_channel.append(ch)
+    else:
+        print(f"[Error] Wrong foil number {f}")
+        raise ValueError
+
 foil_num_list = foil_A_num + foil_B_num 
 foil_channel_list = foil_A_channel + foil_B_channel
 
 for fn, foil_num in enumerate(foil_num_list):
     if foil_num in foil_A_num:
-        text = "GE21-FOIL-M{}-G12-KR-B{}-00{}".format(M_type, batch_num, foil_num)
+        text = "GE21-FOIL-{}-G12-KR-{}-{}".format(M_type, batch_num, foil_num)
     else:
-        text = "GE21-FOIL-M{}-G3-KR-B{}-00{}".format(M_type, batch_num, foil_num)
+        text = "GE21-FOIL-{}-G3-KR-{}-{}".format(M_type, batch_num, foil_num)
 
     txtlists = glob.glob(path_data+"/*.txt")
     for txt in txtlists:

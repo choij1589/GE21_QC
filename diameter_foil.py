@@ -1,15 +1,15 @@
 import matplotlib.pyplot as plt
 from matplotlib.offsetbox import AnchoredText
 from io import StringIO
-import csv 
+import csv
 import numpy as np
 import os
 
 files = ['RO.csv', 'Drift.csv']
 
-########edit case by case batch number, M type, directory path, and foil numbers
-path_data = "../batch_09/Hole_Inspection/"
-path_saved = "../batch_09/Result/Hole_Inspection/"
+# edit case by case batch number, M type, directory path, and foil numbers
+#path_data = "../batch_09/Hole_Inspection/"
+#path_saved = "../batch_09/Result/Hole_Inspection/"
 if not os.path.exists(path_saved):
     os.makedirs(path_saved)
 
@@ -18,15 +18,17 @@ M_type = '2'
 
 section = ['s1', 's2', 's3', 's4', 's5']
 
-foil_A_num = ["19","20","21","22","24","25","26","28","29"]
+foil_A_num = ["19", "20", "21", "22", "24", "25", "26", "28", "29"]
 foil_B_num = []
 foil_num_list = foil_A_num + foil_B_num
 
 for foil_num in foil_num_list:
     if foil_num in foil_A_num:
-        text = "GE21-FOIL-M{}-G12-KR-B{}-00{}".format(M_type, batch_num, foil_num)
+        text = "GE21-FOIL-M{}-G12-KR-B{}-00{}".format(
+            M_type, batch_num, foil_num)
     else:
-        text = "GE21-FOIL-M{}-G3-KR-B{}-00{}".format(M_type, batch_num, foil_num)
+        text = "GE21-FOIL-M{}-G3-KR-B{}-00{}".format(
+            M_type, batch_num, foil_num)
 
     dia_cu_mean, dia_cu_std, dia_pi_mean, dia_pi_std = [], [], [], []
 
@@ -57,10 +59,14 @@ for foil_num in foil_num_list:
 
     fig, ax = plt.subplots()
 
-    plt.errorbar(section, dia_cu_mean[0], yerr=dia_cu_std[0], marker="o", color="blue", capsize=3, label='RO Cu mean')
-    plt.errorbar(section, dia_cu_mean[1], yerr=dia_cu_std[1], marker="o", color="red", capsize=3, label='Drift Cu mean')
-    plt.errorbar(section, dia_pi_mean[0], yerr=dia_pi_std[0], marker="^", color="blue",capsize=3, label='RO PI mean', mfc='white')
-    plt.errorbar(section, dia_pi_mean[1], yerr=dia_pi_std[1], marker="^", color="red", capsize=3, label='Drift PI mean', mfc='white')
+    plt.errorbar(section, dia_cu_mean[0], yerr=dia_cu_std[0],
+                 marker="o", color="blue", capsize=3, label='RO Cu mean')
+    plt.errorbar(section, dia_cu_mean[1], yerr=dia_cu_std[1],
+                 marker="o", color="red", capsize=3, label='Drift Cu mean')
+    plt.errorbar(section, dia_pi_mean[0], yerr=dia_pi_std[0], marker="^",
+                 color="blue", capsize=3, label='RO PI mean', mfc='white')
+    plt.errorbar(section, dia_pi_mean[1], yerr=dia_pi_std[1], marker="^",
+                 color="red", capsize=3, label='Drift PI mean', mfc='white')
 
     plt.xticks(section)
     plt.title(text)
