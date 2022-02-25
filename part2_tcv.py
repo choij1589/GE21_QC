@@ -1,27 +1,33 @@
-import os, argparse
-import ROOT, glob
+import os
+import argparse
+import ROOT
+import glob
 import numpy as np
 from array import array
 ROOT.gROOT.SetBatch(True)
 
-#### example usgae
-# python3 part2_tcv.py -c 2 3 4 5 6 -f 13A 16A 8B 20A 6B
+# example usgae
+"""python3 part2_tcv.py -c 2 3 4 5 6 -f 13A 16A 8B 20A 6B"""
 
-##### Parse arguments
+# Parse arguments
 parser = argparse.ArgumentParser()
-parser.add_argument("--channels", "-c", nargs="+", default=None, required=True, type=int, help="HV channels")
-parser.add_argument("--foils", "-f", nargs="+", default=None, required=True, type=str, help="corresponding foil numbers")
+parser.add_argument("--channels", "-c", nargs="+", default=None,
+                    required=True, type=int, help="HV channels")
+parser.add_argument("--foils", "-f", nargs="+", default=None,
+                    required=True, type=str, help="corresponding foil numbers")
 args = parser.parse_args()
 
-##### edit case by case batch number, M type, directory path, foil number, channel number, and file name
+# edit case by case batch number, M type, directory path, foil number, channel number, and file name
 path_data = ".data/M3_Batch_3/QC2_Long_Data/Part2"
 path_saved = ".results/M3_Batch_3/Part2/"
 batch_num = "B03"
 M_type = "M3"
 #####
 
-if not os.path.exists(path_saved+"Plots/"): os.makedirs(path_saved+"Plots/")
-if not os.path.exists(path_saved+"ROOTs/"): os.makedirs(path_saved+"ROOTs/")
+if not os.path.exists(path_saved+"Plots/"):
+    os.makedirs(path_saved+"Plots/")
+if not os.path.exists(path_saved+"ROOTs/"):
+    os.makedirs(path_saved+"ROOTs/")
 
 # match channels and foils
 channels = args.channels
@@ -52,7 +58,7 @@ for (ch, f) in zip(channels, foils):
         print(f"[Error] Wrong foil number {f}")
         raise ValueError
 
-foil_num_list = foil_A_num + foil_B_num 
+foil_num_list = foil_A_num + foil_B_num
 foil_channel_list = foil_A_channel + foil_B_channel
 
 for fn, foil_num in enumerate(foil_num_list):
@@ -72,16 +78,17 @@ for fn, foil_num in enumerate(foil_num_list):
             elif "Pre" in txt or "pre" in txt:
                 data_num = "_Pre"
             else:
-                data_num = "" # Some foil has data txt more than one ex) 1st, 2nd or test1, test2 or Pre
+                data_num = ""  # Some foil has data txt more than one ex) 1st, 2nd or test1, test2 or Pre
 
             with open(txt, "r") as f:
                 data = f.readlines()
 
-            outfile = ROOT.TFile.Open(path_saved+"/ROOTs/Part2_TCV_"+foil_num+data_num+".root", "RECREATE")
+            outfile = ROOT.TFile.Open(
+                path_saved+"/ROOTs/Part2_TCV_"+foil_num+data_num+".root", "RECREATE")
 
-            time = array('f') 
-            voltage = array('f') 
-            current = array('f') 
+            time = array('f')
+            voltage = array('f')
+            current = array('f')
             for i in range(len(data)):
                 ls = data[i].split()
                 try:
@@ -102,7 +109,7 @@ for fn, foil_num in enumerate(foil_num_list):
             tg1.GetYaxis().CenterTitle(1)
             tg1.SetMarkerStyle(20)
             tg1.SetMarkerSize(0.5)
-            #tg1.SetMarkerStyle(ROOT.kFullDotMedium)
+            # tg1.SetMarkerStyle(ROOT.kFullDotMedium)
             tg1.SetMarkerColor(38)
 
             tg2 = ROOT.TGraph(len(time), time, current)
@@ -115,7 +122,7 @@ for fn, foil_num in enumerate(foil_num_list):
             tg2.GetYaxis().CenterTitle(1)
             tg2.SetMarkerStyle(20)
             tg2.SetMarkerSize(0.5)
-            #tg2.SetMarkerStyle(ROOT.kFullDotMedium)
+            # tg2.SetMarkerStyle(ROOT.kFullDotMedium)
             tg2.SetMarkerColor(ROOT.kRed)
 
             c = ROOT.TCanvas("c", "c")

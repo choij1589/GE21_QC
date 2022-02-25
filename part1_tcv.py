@@ -1,18 +1,23 @@
-import os, argparse
-import ROOT, glob
-import numpy as np
+import os
+import ROOT
+import glob
 from array import array
 ROOT.gROOT.SetBatch(True)
 
-##### edit case by case batch number, M type, directory path, and foil number
-path_data = f".data/M3_Batch_3/QC2_Long_Data/Part1/"
-path_saved = f".results/M3_Batch_3/Part1/"
-batch_num = f"B03"
-M_type = f"M3"
+##### Usage #####
+"""python3 part1_tcv.py"""
+
+# edit case by case batch number, M type, directory path, and foil number
+path_data = ".data/M3_Batch_3/QC2_Long_Data/Part1/"
+path_saved = ".results/M3_Batch_3/Part1/"
+batch_num = "B03"
+M_type = "M3"
 #####
 
-if not os.path.exists(path_saved+"Plots/"): os.makedirs(path_saved+"Plots/")
-if not os.path.exists(path_saved+"ROOTs/"): os.makedirs(path_saved+"ROOTs/")
+if not os.path.exists(path_saved+"Plots/"):
+    os.makedirs(path_saved+"Plots/")
+if not os.path.exists(path_saved+"ROOTs/"):
+    os.makedirs(path_saved+"ROOTs/")
 text_files = os.listdir(path_data)
 
 for fname in text_files:
@@ -20,7 +25,7 @@ for fname in text_files:
     grid_num = fname.split("-")[3]
     foil_num = fname.split("-")[6][:4]
     text = f"GE21-FOIL-{M_type}-{grid_num}-KR-{batch_num}-{foil_num}"
-    
+
     for txt in glob.glob(path_data+"/*.txt"):
         if fname in txt:
             # Some foil has data txt more than one
@@ -35,7 +40,8 @@ for fname in text_files:
 
             with open(txt, "r") as f:
                 data = f.readlines()
-            outfile = ROOT.TFile.Open(path_saved+"/ROOTs/Part1_TCV_"+foil_num+data_num+".root", "RECREATE")
+            outfile = ROOT.TFile.Open(
+                path_saved+"/ROOTs/Part1_TCV_"+foil_num+data_num+".root", "RECREATE")
             time = array('f')
             voltage = array('f')
             current = array('f')
@@ -63,7 +69,7 @@ for fname in text_files:
             tg1.GetYaxis().CenterTitle(1)
             tg1.SetMarkerStyle(20)
             tg1.SetMarkerSize(0.5)
-            #tg1.SetMarkerStyle(ROOT.kFullDotMedium)
+            # tg1.SetMarkerStyle(ROOT.kFullDotMedium)
             tg1.SetMarkerColor(38)
 
             tg2 = ROOT.TGraph(len(time), time, current)
@@ -76,7 +82,7 @@ for fname in text_files:
             tg2.GetYaxis().CenterTitle(1)
             tg2.SetMarkerStyle(20)
             tg2.SetMarkerSize(0.5)
-            #tg2.SetMarkerStyle(ROOT.kFullDotMedium)
+            # tg2.SetMarkerStyle(ROOT.kFullDotMedium)
             tg2.SetMarkerColor(ROOT.kRed)
 
             c = ROOT.TCanvas("c", "c")

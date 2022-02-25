@@ -3,7 +3,10 @@ from math import isnan
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from pprint import pprint
+
+# Usage
+"""python3 hole_inspection.py"""
+
 ##### edit case by case #####
 path_data = ".data/M3_Batch_2"
 path_saved = ".results/M3_Batch_2/Hole_Diameters"
@@ -18,6 +21,8 @@ if not os.path.exists(path_saved):
 dirs = os.listdir(path_data)
 
 ##### helper functions #####
+
+
 def read_data(excel):
     inspections = {
         "s1_Cu": [],
@@ -182,7 +187,8 @@ if __name__ == "__main__":
         plt.ylim(20, 90)
         plt.legend(loc='lower right')
         plt.tight_layout()
-        plt.savefig(f"{path_saved}/F{'0'*(2-len(str(foil_num)))}{foil_num}_diameter.png")
+        plt.savefig(
+            f"{path_saved}/F{'0'*(2-len(str(foil_num)))}{foil_num}_diameter.png")
 
     dCU, dPI = deco(drift_total_ins)
     rCU, rPI = deco(RO_total_ins)
@@ -200,7 +206,7 @@ if __name__ == "__main__":
     drift_pi_mean, drift_pi_std = get_stats(dPI)
     ro_cu_mean, ro_cu_std = get_stats(rCU)
     ro_pi_mean, ro_pi_std = get_stats(rPI)
-    
+
     fig, ax = plt.subplots()
     plt.errorbar(foil_num_list, drift_cu_mean, drift_cu_std,
                  marker="o", color="red", capsize=3, label="Drift Cu mean")
