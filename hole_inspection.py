@@ -9,6 +9,7 @@ path_data = ".data/M3_Batch_2"
 path_saved = ".results/M3_Batch_2/Hole_Diameters"
 M_type = 3
 batch_num = "02"
+#####
 
 if not os.path.exists(path_saved):
     os.makedirs(path_saved)
@@ -17,8 +18,6 @@ if not os.path.exists(path_saved):
 dirs = os.listdir(path_data)
 
 ##### helper functions #####
-
-
 def read_data(excel):
     inspections = {
         "s1_Cu": [],

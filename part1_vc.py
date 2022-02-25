@@ -1,26 +1,21 @@
 import os
-import argparse
+#import argparse
 import ROOT
 import glob
 import matplotlib.pyplot as plt
 import numpy as np
 
-##### Parse arguments #####
-parser = argparse.ArgumentParser()
-parser.add_argument("-m", default=None, required=True, type=str, help="Mxx")
-parser.add_argument("--batch", "-b", default=None,
-                    required=True, type=str, help="batch number")
-args = parser.parse_args()
+##### edit case by case batch number, M type, directory path, and foil number
+path_data = ".data/M3_Batch_3/QC2_Long_Data/Part1/"
+path_saved = ".results/M3_Batch_3/Part1/"
+batch_num = "B03"
+M_type = "M3"
 
-# edit case by case batch number, M type, directory path, and foil number
-path_data = f".data/M{args.m}_Batch_{int(args.batch)}/Part1/"
-path_saved = f".results/M{args.m}_Batch_{int(args.batch)}/Part1/"
+#####
 if not os.path.exists(path_saved+"Plots/"):
     os.makedirs(path_saved+"Plots/")
 if not os.path.exists(path_saved+"ROOTs/"):
     os.makedirs(path_saved+"ROOTs/")
-batch_num = f"B{args.batch}"
-M_type = f"M{args.m}"
 
 text_files = os.listdir(path_data)
 for fname in text_files:

@@ -5,36 +5,36 @@ from array import array
 ROOT.gROOT.SetBatch(True)
 
 #### example usgae
-# python3 part2_tcv.py -m 3 -b 02 -c 2 3 4 5 6 -f 13A 16A 8B 20A 6B
+# python3 part2_tcv.py -c 2 3 4 5 6 -f 13A 16A 8B 20A 6B
 
 ##### Parse arguments
 parser = argparse.ArgumentParser()
-parser.add_argument("-m", default=None, required=True, type=str, help="Mxx")
-parser.add_argument("--batch", "-b", default=None, required=True, type=str, help="batch number")
 parser.add_argument("--channels", "-c", nargs="+", default=None, required=True, type=int, help="HV channels")
 parser.add_argument("--foils", "-f", nargs="+", default=None, required=True, type=str, help="corresponding foil numbers")
 args = parser.parse_args()
 
 ##### edit case by case batch number, M type, directory path, foil number, channel number, and file name
-path_data = f".data/M{args.m}_Batch_{int(args.batch)}/Part2/"
-path_saved = f".results/M{args.m}_Batch_{int(args.batch)}/Part2/"
+path_data = ".data/M3_Batch_3/QC2_Long_Data/Part2"
+path_saved = ".results/M3_Batch_3/Part2/"
+batch_num = "B03"
+M_type = "M3"
+#####
+
 if not os.path.exists(path_saved+"Plots/"): os.makedirs(path_saved+"Plots/")
 if not os.path.exists(path_saved+"ROOTs/"): os.makedirs(path_saved+"ROOTs/")
-batch_num = f"B{args.batch}"
-M_type = f"M{args.m}"
 
 # match channels and foils
 channels = args.channels
 foils = args.foils
 assert len(channels) == len(foils)
-print(channels)
-print(foils)
+print(f"HV channels:\t{channels}")
+print(f"cor. foils:\t{foils}")
 
 fname = ""
 for (ch, f) in zip(channels, foils):
     fname += f"Ch{ch}F{f[:-1]}_"
 fname = fname[:-1]
-fname = "Ch2F23_Ch3F10_Ch5B3F5_Ch6F4"
+print(f"input text name: {fname}")
 
 foil_A_num = []
 foil_B_num = []
@@ -63,6 +63,7 @@ for fn, foil_num in enumerate(foil_num_list):
 
     txtlists = glob.glob(path_data+"/*.txt")
     for txt in txtlists:
+        print(txt)
         if fname in txt:
             if "test2" in txt or "2nd" in txt:
                 data_num = "_2nd"

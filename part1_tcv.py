@@ -4,32 +4,16 @@ import numpy as np
 from array import array
 ROOT.gROOT.SetBatch(True)
 
-##### Parse arguments #####
-parser = argparse.ArgumentParser()
-parser.add_argument("-m", default=None, required=True, type=str, help="Mxx")
-parser.add_argument("--batch", "-b", default=None, required=True, type=str, help="batch number")
-args = parser.parse_args()
+##### edit case by case batch number, M type, directory path, and foil number
+path_data = f".data/M3_Batch_3/QC2_Long_Data/Part1/"
+path_saved = f".results/M3_Batch_3/Part1/"
+batch_num = f"B03"
+M_type = f"M3"
+#####
 
-########edit case by case batch number, M type, directory path, and foil number
-# Open file
-# path_data = "../batch_09/QC2Long1/"
-# path_saved = "../batch_09/Result/QC2Long_part1/" 
-# path_data = "./data/Part1/"
-# path_saved = "./saved/Part1/"
-path_data = f".data/M{args.m}_Batch_{int(args.batch)}/Part1/"
-path_saved = f".results/M{args.m}_Batch_{int(args.batch)}/Part1/"
 if not os.path.exists(path_saved+"Plots/"): os.makedirs(path_saved+"Plots/")
 if not os.path.exists(path_saved+"ROOTs/"): os.makedirs(path_saved+"ROOTs/")
-
-batch_num = f"B{args.batch}"
-M_type = f"M{args.m}"
-
 text_files = os.listdir(path_data)
-
-
-#foil_A_num = ["23"]
-#foil_B_num = ["4", "10"]
-#foil_num_list = foil_A_num + foil_B_num
 
 for fname in text_files:
     print(fname)
