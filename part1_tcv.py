@@ -8,8 +8,8 @@ ROOT.gROOT.SetBatch(True)
 """python3 part1_tcv.py"""
 
 # edit case by case batch number, M type, directory path, and foil number
-path_data = ".data/M3_Batch_3/QC2_Long_Data/Part1/"
-path_saved = ".results/M3_Batch_3/Part1/"
+path_data = ".data/M3_Batch_2/Part1/"
+path_saved = ".results/M3_Batch_2/Part1/"
 batch_num = "B03"
 M_type = "M3"
 #####
