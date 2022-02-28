@@ -1,19 +1,10 @@
 # GEM QC2
 
 ## Hole Inspection
-
-- Hole Diameter Plot을 그리기 위해서는 foil 별 CU/PI Mean, Std 값을 한 엑셀 시트 안에 정리해 주시는 것이 좋습니다. (참고: Hole Diameter)
-- 위의 엑셀 파일처럼 diameter를 정리해 주신 후, Drift와 RO 시트를 따로 Drift(RO).csv 파일로 저장해 주세요.
-- csv 파일을 path_data 위치로 옮겨 주세요.
-
-* `diameter_foil.py`
-  - foil section별 RO/Drift Side의 CU/PI diameter을 보여주는 플랏을 그리는 코드
-  - 실행 : python3 diameter_foil.py
-  - result : F04_diameter.png
-* `diameter_all.py`
-  - foil별 RO/Drift Side의 CU/PI diameter을 보여주는 플랏을 그리는 코드
-  - 실행 : python3 diameter_all.py
-  - result : diameter.png
+  - 파일 안에 path_data와 path_saved에 필요한 파일을 링크해 주세요.
+  - path_data는 폴더 안의 M*_B0*_* 폴더 안의 엑셀 파일을 읽어들입니다.
+  - 실행: python3 hole_inspection.py
+  - result: 각 포일의 섹션 별 mean/std, 전체 포일의 mean/std, 엑셀 파일
 
 ## QC2 Long - Part1
 
@@ -22,17 +13,15 @@
   - QC2 Long Part1 실험 후 자동 저장되는 txt 파일을 이용합니다. 
     - (Ex. QC2LONG_PART1_GE21-FOIL-M2-G12-KR-B05-0014_20210712_12-27_test3.txt)
   - data 파일(위에서 언급한 txt 파일)을 path_data 디렉토리로 옮겨주세요.
-  - 실행 : python3 part1_tcv.py -m 3 -b 02
-  - M3 Batch02번 포일들에 대해 코드를 실행합니다.
-  - result : Part1_TCV_14_3rd.png , Part1_TCV_14_3rd.root
+  - 실행 : python3 part1_tcv.py
+  - result : part1 전체 tcv 플롯, 루트파일
 
 * `part1_vc.py`
   - 처음에 전압을 올리는 구간 중에서 전류의 resolution이 좋은 순간들만 추려내서 각 전압에서의 전류 평균을 구하고 전압-전류 플랏을 그리는 코드
   - 돌리면서 600V, 100V에서의 전류 평균들과 그 차이을 print해주는데 이를 엑셀로 정리하고 저장해주시면 됩니다. (참고: Current Difference.xlsx)
   - 혹시 코드가 불안정할 수 있으니 몇가지 경우들에 대해서 직접 평균값을 액셀로 구해보시고 비교해보시면 좋을 것 같습니다. 또는 output png에서 y축 scale이 엄청 큰 경우들이 있는데 이는 spark때문에 생기는 것으로  생각됩니다. 확인해주시면 안전할 것 같습니다.
-  - 실행 : python3 part1_vc.py -m 3 -b 02
-  - M3 Batch02번 포일들에 대해 코드를 실행합니다
-  - result : Part1_VC_14_3rd.png
+  - 실행 : python3 part1_vc.py
+  - result : part1 전체 vc 플롯, 루트파일
 
 ## QC2 Long - Part2
 
@@ -42,9 +31,9 @@
     - (Ex. QC2_all_channels_monitor_20210722_16-55_F18F16F05F24_2nd.txt)
   - 반드시 몇 번 foil이 몇 번 channel에 연결되어 있는 지를 알고 있어야 합니다.
   - 파일 실행 시, foil별로 png 파일들과 root 파일들이 여러개 만들어집니다.
-  - 실행 : python3 part2_tcv.py -m 3 -b 02 -c 2 3 4 5 6 -f 13A 16A 8B 20A 6B
+  - 실행 : python3 part2_tcv.py -c 2 3 4 5 6 -f 13A 16A 8B 20A 6B
   - 실행 시 HV channel 순서와 foil 순서를 맞춰주셔야 합니다.
-  - result : Part2_TCV_24_2nd.png, Part2_TCV_24_2nd.root
+  - result : 해당 포일들의 tcv플롯, 루트파일
 
 ## For All Code
 
@@ -68,4 +57,4 @@ QC2 Long 같은 경우에는 같은 foil에 대해서 여러번 실험을 반복
 * 최민욱 2021.09.10
   - 파일 불러오는 방식이 좀 불편해서 원터치로 모든 파일을 프로세스하게 바꿨습니다. 환경에 맞추어 사용하시기 바랍니다.
 * 최진 2022.02.23
-  - 전체적으로 코드 안을 보지 않고 argument만을 넘겨 그림을 그릴 수 있도록 수정하였습니다.
+  - hole_inspection파트에 수작업이 필요 없게 수정하였습니다. OV과정에서 규격에 맞지 않게 데이터를 정리했다면 버그가 있을 수 있습니다.
