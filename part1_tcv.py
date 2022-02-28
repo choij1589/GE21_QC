@@ -2,6 +2,7 @@ import os
 import ROOT
 import glob
 from array import array
+import numpy as np
 ROOT.gROOT.SetBatch(True)
 
 ##### Usage #####
@@ -56,9 +57,24 @@ for fname in text_files:
                 voltage.append(float(ls[0]))
                 current.append(float(ls[1]))
 
-            print(max(voltage))
-            print(max(current))
-
+            #print(max(voltage), min(voltage))
+            #print(max(current), min(current))
+            #print(voltage)
+            #print(current)
+            clow = []
+            chigh = []
+            for v, c in zip(voltage, current):
+                if len(str(c)) == 3 or str(c)[5:8] in ["000", "999"]:
+                    continue
+                else:
+                    # Imon range high
+                    if 95 < round(v) < 105:
+                        clow.append(c)
+                    elif 595 < round(v) < 605:
+                        chigh.append(c)
+                    else:
+                        continue
+            print(f"current diff.: {np.array(chigh).mean() - np.array(clow).mean()}")
             tg1 = ROOT.TGraph(len(time), time, voltage)
             tg1.SetTitle("; ;Voltage (V)")
             tg1.GetXaxis().SetLabelSize(0.05)
